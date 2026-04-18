@@ -126,9 +126,6 @@ Templates (PodoApp Layout)
 git clone https://github.com/sennaates/2026-frontend-challenge-ankara.git
 cd 2026-frontend-challenge-ankara
 
-# Switch to develop branch
-git checkout develop
-
 # Install dependencies
 npm install
 
