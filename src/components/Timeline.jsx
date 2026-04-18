@@ -1,7 +1,16 @@
 // src/components/Timeline.jsx
+import { Fragment } from 'react';
 import StatusBadge, { DOT_COLORS } from './ui/StatusBadge';
 import EmptyState from './ui/EmptyState';
 import Button from './ui/Button';
+
+const parseCustomDate = (dateStr) => {
+  if (!dateStr) return 0;
+  const match = dateStr.match(/^(\d{2})-(\d{2})-(\d{4}) (\d{2}):(\d{2})/);
+  if (!match) return new Date(dateStr).getTime() || 0;
+  const [, d, m, y, h, min] = match;
+  return new Date(`${y}-${m}-${d}T${h}:${min}:00`).getTime();
+};
 
 export default function Timeline({ clues, selectedLocation, onLocationClick, onClearFilter }) {
   if (clues.length === 0) {
@@ -28,16 +37,32 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
         const dotClass   = DOT_COLORS[clue.type] ?? 'bg-slate-500';
         const isGeoTagged = !!clue.coords;
 
+        // Proximity calculation (comparing with the older item, i.e., next in descending array)
+        let hasProximity = false;
+        let timeDiffMins = 0;
+        const nextClue = clues[idx + 1];
+        if (nextClue) {
+          const t1 = parseCustomDate(clue.date);
+          const t2 = parseCustomDate(nextClue.date);
+          if (t1 && t2 && clue.location === nextClue.location) {
+            const diffMs = Math.abs(t1 - t2);
+            timeDiffMins = Math.round(diffMs / 60000);
+            if (timeDiffMins < 15) {
+              hasProximity = true;
+            }
+          }
+        }
+
         return (
-          <li
-            key={`${clue.id}-${idx}`}
-            className="relative pl-7 before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-slate-800"
-          >
-            {/* Timeline dot */}
-            <div
-              aria-hidden="true"
-              className={`absolute left-[-4px] top-3 w-2 h-2 rounded-full ${dotClass} shadow-[0_0_8px_rgba(245,158,11,0.3)]`}
-            />
+          <Fragment key={`${clue.id}-${idx}`}>
+            <li
+              className="relative pl-7 before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-[-12px] before:w-px before:bg-slate-800"
+            >
+              {/* Timeline dot */}
+              <div
+                aria-hidden="true"
+                className={`absolute left-[-4px] top-3 w-2 h-2 rounded-full ${dotClass} shadow-[0_0_8px_rgba(245,158,11,0.3)]`}
+              />
 
             <article
               aria-label={`${clue.type} kaydı — ${clue.location} — ${clue.person}`}
@@ -90,6 +115,20 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
               </footer>
             </article>
           </li>
+          
+          {/* Proximity Link rendered between idx and idx+1 */}
+          {hasProximity && (
+            <div className="relative pl-7 flex items-center mb-[-6px] mt-[-6px] z-10" aria-label={`${timeDiffMins} dakika sonra aynı bölgede`}>
+              <div className="absolute left-[-4px] w-2 h-full flex flex-col items-center justify-center">
+                <div className="w-px h-full bg-indigo-500/50"></div>
+              </div>
+              <div className="flex items-center gap-1 text-[10px] font-mono text-indigo-400 bg-slate-900/80 px-2 py-0.5 rounded-md border border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+                <span className="animate-pulse">↕</span>
+                <span>{timeDiffMins} dakika sonra - Aynı bölgede</span>
+              </div>
+            </div>
+          )}
+          </Fragment>
         );
       })}
     </ol>
