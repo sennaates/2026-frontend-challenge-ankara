@@ -30,7 +30,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   background: var(--color-page);
   color: var(--color-primary);
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
@@ -39,9 +39,11 @@ html, body {
 
 #root {
   width: 100%;
-  min-height: 100dvh;
+  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* ── Leaflet Brand-theme overrides ─────────────── */

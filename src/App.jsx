@@ -210,7 +210,7 @@ function PodoApp() {
 
   // ─── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="w-full min-h-screen bg-page text-primary font-sans flex flex-col">
+    <div className="w-full h-screen bg-page text-primary font-sans flex flex-col overflow-hidden">
 
       {/* ── Header ────────────────────────────────────────────────────────────── */}
       <header
@@ -287,12 +287,12 @@ function PodoApp() {
         <aside
           aria-label="Şüpheli listesi"
           className="hidden lg:flex w-64 border-r border-border bg-sidebar flex-col"
-          style={{ height: 'calc(100vh - 140px)' }}
+          style={{ height: 'calc(100vh - 88px)' }}
         >
           <div className="p-3 border-b border-border shrink-0">
             <h2 className="text-xs font-black text-secondary tracking-widest uppercase">Şüpheli Listesi</h2>
           </div>
-          <ul className="flex-1 flex flex-col p-2 gap-1.5 overflow-hidden" role="list">
+          <ul className="flex-1 flex flex-col p-2 gap-1.5 overflow-y-auto" role="list">
             <li className="flex-1 min-h-0">
               <Button
                 variant={!selectedPerson ? 'primary' : 'ghost'}
@@ -339,17 +339,17 @@ function PodoApp() {
           {/* Map panel with Top 3 */}
           <section
             aria-label="İstihbarat haritası"
-            className="border-b lg:border-b-0 lg:border-r border-border p-3 flex flex-col gap-2 bg-page"
-            style={{ height: 'calc(100vh - 140px)' }}
+            className="border-b lg:border-b-0 lg:border-r border-border flex flex-col bg-page"
+            style={{ height: 'calc(100vh - 88px)' }}
           >
             <div
-              className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
+              className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0 px-3 pt-3"
               aria-hidden="true"
             >
               <span>🗺 İstihbarat Haritası — Ankara</span>
               <span>{geoLocationCount} lokasyon</span>
             </div>
-            <div className="relative rounded-xl overflow-hidden" style={{ height: 'calc(100% - 140px)' }}>
+            <div className="relative flex-1 mx-3 mt-2 rounded-xl overflow-hidden">
               <MapView
                 clues={filteredClues}
                 selectedLocation={selectedLocation}
@@ -358,7 +358,7 @@ function PodoApp() {
             </div>
 
             {/* Top 3 Suspects Panel */}
-            <div className="shrink-0 flex flex-col gap-1.5">
+            <div className="shrink-0 flex flex-col gap-1.5 px-3 pb-3 pt-2">
               <h3 className="text-[11px] font-black text-secondary uppercase tracking-widest">
                 En Şüpheli 3 Kişi
               </h3>
@@ -408,8 +408,8 @@ function PodoApp() {
           {/* Timeline panel */}
           <section
             aria-label="Kronolojik olay akışı"
-            className="timeline-scroll flex flex-col gap-2 p-3 bg-page"
-            style={{ height: 'calc(100vh - 140px)' }}
+            className="flex flex-col gap-2 p-3 bg-page overflow-hidden"
+            style={{ height: 'calc(100vh - 88px)' }}
           >
             <div
               className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
