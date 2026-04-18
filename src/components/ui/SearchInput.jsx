@@ -1,7 +1,7 @@
 // src/components/ui/SearchInput.jsx
 /**
  * Reusable Search Input
- * Props: value, onChange, placeholder, id, aria-label
+ * Props: value, onChange, placeholder, id, aria-label, className
  */
 export default function SearchInput({
   value,
@@ -27,12 +27,10 @@ export default function SearchInput({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        {...props}
-        className={`w-full bg-card border border-border rounded-full pl-9 pr-5 py-2 text-sm
+        className="w-full bg-card border border-border rounded-full pl-9 pr-5 py-2 text-sm
           text-primary placeholder-secondary shadow-sm
           focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30
-          transition-all
-          ${className}`}
+          transition-all"
       />
     </div>
   );
