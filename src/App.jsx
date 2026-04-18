@@ -216,6 +216,7 @@ function PodoApp() {
       <header
         className="shrink-0 w-full px-4 py-3 border-b border-border bg-page/95 backdrop-blur sticky top-0 z-[2000]"
         role="banner"
+        style={{ minHeight: '88px' }}
       >
         {!selectedPerson ? (
           /* Normal Header */
@@ -277,75 +278,7 @@ function PodoApp() {
           </div>
         )}
 
-        {/* Row 2: search + reset */}
-        <div
-          role="search"
-          aria-label="Kayıt filtreleri"
-          className="flex items-center gap-2 mt-2 w-full"
-        >
-          <SearchInput
-            id="global-search"
-            value={searchTerm}
-            onChange={e => setSearchTerm(e.target.value)}
-            placeholder="İsim veya lokasyon ara..."
-            aria-label="İsim veya lokasyon ile ara"
-            className="flex-1"
-          />
-          {anyFilter && (
-            <Button
-              variant="danger"
-              aria-label="Tüm filtreleri sıfırla"
-              onClick={clearFilters}
-            >
-              ✕ Sıfırla
-            </Button>
-          )}
-        </div>
       </header>
-
-      {/* ── Suspects strip: mobile/tablet horizontal scroll ─────────────── */}
-      <nav
-        aria-label="Şüpheli filtreleri"
-        className="lg:hidden w-full border-b border-border bg-sidebar px-4 py-2"
-      >
-        <ul className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none" role="list">
-          <li className="shrink-0">
-            <Button
-              variant={!selectedPerson ? 'primary' : 'ghost'}
-              aria-label="Tüm şüphelileri göster"
-              aria-pressed={!selectedPerson}
-              onClick={() => setSelectedPerson(null)}
-              className="flex items-center gap-2"
-            >
-              Hepsi
-              <span className="text-[10px] bg-page px-1.5 rounded-full ring-1 ring-border flex items-center gap-1 text-primary">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand inline-block"></span>
-                {allClues.filter(c => c.normalizedPerson).length}
-              </span>
-            </Button>
-          </li>
-          {suspects.map(name => {
-            const isSelected = selectedPerson === name;
-            return (
-              <li key={name} className="shrink-0">
-                <Button
-                  variant={isSelected ? 'primary' : 'ghost'}
-                  aria-label={`${name} şüphelisini filtrele`}
-                  aria-pressed={isSelected}
-                  onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-                  className={`flex items-center gap-2 transition-all ${isSelected ? 'ring-2 ring-brand bg-card shadow-sm' : ''}`}
-                >
-                  {toTitleCase(name)}
-                  <span className="text-[10px] bg-page px-1.5 rounded-full ring-1 ring-border flex items-center gap-1 text-primary">
-                    <span className="w-1.5 h-1.5 rounded-full bg-brand inline-block"></span>
-                    {getConnectionScore(name)}
-                  </span>
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
 
       {/* ── Body ──────────────────────────────────────────────────────────── */}
       <div className="flex flex-1 overflow-hidden">
@@ -353,36 +286,41 @@ function PodoApp() {
         {/* ── Suspects sidebar: desktop only ───────────────────────────── */}
         <aside
           aria-label="Şüpheli listesi"
-          className="hidden lg:flex w-64 border-r border-border bg-sidebar flex-col overflow-hidden"
+          className="hidden lg:flex w-64 border-r border-border bg-sidebar flex-col"
+          style={{ height: 'calc(100vh - 140px)' }}
         >
-          <div className="p-4 border-b border-border shrink-0">
+          <div className="p-3 border-b border-border shrink-0">
             <h2 className="text-xs font-black text-secondary tracking-widest uppercase">Şüpheli Listesi</h2>
           </div>
-          <ul className="flex-1 flex flex-col p-2 gap-2" role="list">
-            <li style={{ flex: `1 1 ${100 / (suspects.length + 1)}%` }}>
+          <ul className="flex-1 flex flex-col p-2 gap-1.5 overflow-hidden" role="list">
+            <li className="flex-1 min-h-0">
               <Button
                 variant={!selectedPerson ? 'primary' : 'ghost'}
                 aria-label="Tüm şüphelileri göster"
                 aria-pressed={!selectedPerson}
                 onClick={() => setSelectedPerson(null)}
-                className="w-full h-full flex items-center justify-center"
+                className="w-full h-full flex flex-col items-center justify-center gap-1.5"
               >
-                Hepsi
+                <span className="text-sm font-bold">Hepsi</span>
+                <span className="text-[10px] bg-page px-1.5 py-0.5 rounded-md ring-1 ring-border flex items-center gap-1 font-mono text-primary">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_5px_rgba(255,97,0,0.5)] inline-block"></span>
+                  {allClues.filter(c => c.normalizedPerson).length}
+                </span>
               </Button>
             </li>
             {suspects.map(name => {
               const isSelected = selectedPerson === name;
               return (
-                <li key={name} style={{ flex: `1 1 ${100 / (suspects.length + 1)}%` }}>
+                <li key={name} className="flex-1 min-h-0">
                   <Button
                     variant={isSelected ? 'primary' : 'ghost'}
                     aria-label={`${name} şüphelisini filtrele`}
                     aria-pressed={isSelected}
                     onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-                    className={`w-full h-full flex flex-col items-center justify-center gap-2 transition-all ${isSelected ? 'ring-2 ring-brand bg-card shadow-sm' : ''}`}
+                    className={`w-full h-full flex flex-col items-center justify-center gap-1.5 transition-all ${isSelected ? 'ring-2 ring-brand bg-card shadow-sm' : ''}`}
                   >
-                    <span className="text-base font-bold">{toTitleCase(name)}</span>
-                    <span className="text-[10px] bg-page px-2 py-1 rounded-md ring-1 ring-border flex items-center gap-1 font-mono text-primary">
+                    <span className="text-sm font-bold">{toTitleCase(name)}</span>
+                    <span className="text-[10px] bg-page px-1.5 py-0.5 rounded-md ring-1 ring-border flex items-center gap-1 font-mono text-primary">
                       <span className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_5px_rgba(255,97,0,0.5)] inline-block"></span>
                       {getConnectionScore(name)}
                     </span>
@@ -401,7 +339,8 @@ function PodoApp() {
           {/* Map panel with Top 3 */}
           <section
             aria-label="İstihbarat haritası"
-            className="border-b lg:border-b-0 lg:border-r border-border p-3 sm:p-4 flex flex-col gap-3 bg-page overflow-hidden"
+            className="border-b lg:border-b-0 lg:border-r border-border p-3 flex flex-col gap-2 bg-page"
+            style={{ height: 'calc(100vh - 140px)' }}
           >
             <div
               className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
@@ -410,7 +349,7 @@ function PodoApp() {
               <span>🗺 İstihbarat Haritası — Ankara</span>
               <span>{geoLocationCount} lokasyon</span>
             </div>
-            <div className="relative flex-1 rounded-xl overflow-hidden min-h-0">
+            <div className="relative rounded-xl overflow-hidden" style={{ height: 'calc(100% - 140px)' }}>
               <MapView
                 clues={filteredClues}
                 selectedLocation={selectedLocation}
@@ -419,11 +358,11 @@ function PodoApp() {
             </div>
 
             {/* Top 3 Suspects Panel */}
-            <div className="shrink-0 flex flex-col gap-2">
-              <h3 className="text-[13px] font-black text-secondary uppercase tracking-widest">
+            <div className="shrink-0 flex flex-col gap-1.5">
+              <h3 className="text-[11px] font-black text-secondary uppercase tracking-widest">
                 En Şüpheli 3 Kişi
               </h3>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 {top3Suspects.map((suspect, idx) => {
                   const maxScore = Math.max(...top3Suspects.map(s => s.score), 10);
                   const percentage = (suspect.score / maxScore) * 100;
@@ -434,23 +373,23 @@ function PodoApp() {
                   return (
                     <div
                       key={suspect.name}
-                      className="flex-1 bg-[#1e1e3a] rounded-lg p-3.5 flex flex-col gap-2"
+                      className="flex-1 bg-[#1e1e3a] rounded-lg p-2.5 flex flex-col gap-1.5"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-2xl font-black text-white/40">
+                        <span className="text-xl font-black text-white/40">
                           {idx + 1}
                         </span>
                         <span
-                          className="text-xs font-bold px-2 py-0.5 rounded"
+                          className="text-[10px] font-bold px-1.5 py-0.5 rounded"
                           style={{ backgroundColor: badgeColor, color: '#fff' }}
                         >
                           {suspect.score}
                         </span>
                       </div>
-                      <div className="text-sm font-bold text-white">
+                      <div className="text-xs font-bold text-white">
                         {toTitleCase(suspect.name)}
                       </div>
-                      <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all duration-300"
                           style={{
@@ -469,8 +408,8 @@ function PodoApp() {
           {/* Timeline panel */}
           <section
             aria-label="Kronolojik olay akışı"
-            className="timeline-scroll flex flex-col gap-3 p-3 sm:p-4 overflow-y-auto bg-page"
-            style={{ maxHeight: '100vh' }}
+            className="timeline-scroll flex flex-col gap-2 p-3 bg-page"
+            style={{ height: 'calc(100vh - 140px)' }}
           >
             <div
               className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
@@ -480,22 +419,50 @@ function PodoApp() {
               <span aria-live="polite" aria-atomic="true">{filteredClues.length} kayıt</span>
             </div>
 
-            {loading ? (
-              <SkeletonLoader count={6} />
-            ) : error ? (
-              <ErrorState
-                title="Bağlantı Hatası"
-                description={error}
-                onRetry={fetchData}
+            {/* Search bar */}
+            <div
+              role="search"
+              aria-label="Kayıt filtreleri"
+              className="flex items-center gap-2 shrink-0"
+            >
+              <SearchInput
+                id="global-search"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                placeholder="İsim veya lokasyon ara..."
+                aria-label="İsim veya lokasyon ile ara"
+                className="flex-1"
               />
-            ) : (
-              <Timeline
-                clues={filteredClues}
-                selectedLocation={selectedLocation}
-                onLocationClick={handleMarkerClick}
-                onClearFilter={() => setSelectedLocation(null)}
-              />
-            )}
+              {anyFilter && (
+                <Button
+                  variant="danger"
+                  aria-label="Tüm filtreleri sıfırla"
+                  onClick={clearFilters}
+                >
+                  ✕ Sıfırla
+                </Button>
+              )}
+            </div>
+
+            {/* Scrollable content */}
+            <div className="flex-1 overflow-y-auto min-h-0">
+              {loading ? (
+                <SkeletonLoader count={6} />
+              ) : error ? (
+                <ErrorState
+                  title="Bağlantı Hatası"
+                  description={error}
+                  onRetry={fetchData}
+                />
+              ) : (
+                <Timeline
+                  clues={filteredClues}
+                  selectedLocation={selectedLocation}
+                  onLocationClick={handleMarkerClick}
+                  onClearFilter={() => setSelectedLocation(null)}
+                />
+              )}
+            </div>
           </section>
         </main>
       </div>
