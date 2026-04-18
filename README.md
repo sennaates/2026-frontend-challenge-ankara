@@ -142,7 +142,7 @@ npm run build
 npm run preview
 ```
 
-Uygulama varsayılan olarak `http://localhost:5173` adresinde çalışacaktır.
+Uygulama varsayılan olarak `http://localhost:5173` adresinde çalışacaktır (port kullanımdaysa otomatik olarak 5174, 5175 vb. denenecektir).
 
 ---
 
