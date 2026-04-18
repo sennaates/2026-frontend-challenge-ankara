@@ -15,7 +15,7 @@ export default function SearchInput({
     <div className={`relative ${className}`}>
       <span
         aria-hidden="true"
-        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-sm pointer-events-none"
+        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-sm pointer-events-none"
       >
         🔍
       </span>
@@ -27,10 +27,12 @@ export default function SearchInput({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full bg-slate-900 border border-slate-700 rounded-full pl-9 pr-5 py-2 text-sm
-          text-slate-200 placeholder-slate-500
-          focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/30
-          transition duration-200"
+        {...props}
+        className={`w-full bg-card border border-border rounded-full pl-9 pr-5 py-2 text-sm
+          text-primary placeholder-secondary shadow-sm
+          focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand/30
+          transition-all
+          ${className}`}
       />
     </div>
   );

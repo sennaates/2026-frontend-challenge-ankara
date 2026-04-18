@@ -56,7 +56,7 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
         return (
           <Fragment key={`${clue.id}-${idx}`}>
             <li
-              className="relative pl-7 before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-[-12px] before:w-px before:bg-slate-800"
+              className="relative pl-7 before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-[-12px] before:w-px before:bg-border"
             >
               {/* Timeline dot */}
               <div
@@ -66,14 +66,14 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
 
             <article
               aria-label={`${clue.type} kaydı — ${clue.location} — ${clue.person}`}
-              className="bg-slate-900 p-4 rounded-xl border border-slate-800 hover:border-amber-500/40 transition-all duration-200"
+              className="bg-card p-4 rounded-xl border border-border hover:border-brand/40 hover:shadow-md transition-all duration-200"
             >
               {/* Header row */}
               <header className="flex justify-between items-start mb-2 gap-2">
                 <StatusBadge type={clue.type} />
                 <time
                   dateTime={clue.date}
-                  className="text-[10px] font-mono text-slate-500 shrink-0"
+                  className="text-[10px] font-mono text-secondary shrink-0"
                   aria-label={`Tarih: ${clue.date}`}
                 >
                   {clue.date}
@@ -86,26 +86,26 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
                   type="button"
                   aria-label={`${clue.location} konumunu haritada göster`}
                   onClick={() => onLocationClick(clue.location)}
-                  className="flex items-center gap-1 text-slate-100 font-bold text-left mb-1 leading-tight
-                    hover:text-amber-400 transition-colors focus:outline-none
-                    focus-visible:ring-1 focus-visible:ring-amber-400 rounded"
+                  className="flex items-center gap-1 text-primary font-bold text-left mb-1 leading-tight
+                    hover:text-brand transition-colors focus:outline-none
+                    focus-visible:ring-1 focus-visible:ring-brand rounded"
                 >
-                  <span aria-hidden="true" className="text-amber-500 text-xs">📍</span>
+                  <span aria-hidden="true" className="text-brand text-xs">📍</span>
                   {clue.location}
                 </button>
               ) : (
-                <h3 className="text-slate-100 font-bold mb-1 leading-tight">{clue.location}</h3>
+                <h3 className="text-primary font-bold mb-1 leading-tight">{clue.location}</h3>
               )}
 
               {/* Content */}
-              <p className="text-slate-400 text-sm leading-relaxed mb-3 line-clamp-3">
+              <p className="text-secondary text-sm leading-relaxed mb-3 line-clamp-3">
                 "{clue.content}"
               </p>
 
               {/* Footer */}
               <footer className="flex gap-2 flex-wrap">
                 {clue.normalizedPerson && (
-                  <span className="text-[10px] bg-slate-800 text-amber-500 px-2 py-1 rounded-md font-bold">
+                  <span className="text-[10px] bg-page border border-border text-brand px-2 py-1 rounded-md font-bold">
                     KİŞİ: {clue.normalizedPerson}
                   </span>
                 )}
@@ -120,9 +120,9 @@ export default function Timeline({ clues, selectedLocation, onLocationClick, onC
           {hasProximity && (
             <div className="relative pl-7 flex items-center mb-[-6px] mt-[-6px] z-10" aria-label={`${timeDiffMins} dakika sonra aynı bölgede`}>
               <div className="absolute left-[-4px] w-2 h-full flex flex-col items-center justify-center">
-                <div className="w-px h-full bg-indigo-500/50"></div>
+                <div className="w-px h-full bg-brand/30"></div>
               </div>
-              <div className="flex items-center gap-1 text-[10px] font-mono text-indigo-400 bg-slate-900/80 px-2 py-0.5 rounded-md border border-indigo-500/30 shadow-[0_0_10px_rgba(99,102,241,0.2)]">
+              <div className="flex items-center gap-1 text-[10px] font-mono text-brand bg-card px-2 py-0.5 rounded-md border border-brand/20 shadow-sm">
                 <span className="animate-pulse">↕</span>
                 <span>{timeDiffMins} dakika sonra - Aynı bölgede</span>
               </div>

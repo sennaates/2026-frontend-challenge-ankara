@@ -1,5 +1,24 @@
 @import "tailwindcss";
 
+@theme {
+  --color-page: var(--bg-page);
+  --color-card: var(--bg-card);
+  --color-sidebar: var(--bg-sidebar);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+}
+
+:root {
+  --bg-page:    #F3F3FE;
+  --bg-card:    #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --text-primary:   #0A1551;
+  --text-secondary: #6B7280;
+  --border:     #E8E8F0;
+  --brand:      #FF6100;
+}
 /* ── Toast slide-in animation ─────────────────── */
 @keyframes slideIn {
   from { opacity: 0; transform: translateX(1.5rem); }
@@ -22,7 +41,8 @@ html, body {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
-  background: #020617; /* slate-950 */
+  background: var(--bg-page);
+  color: var(--text-primary);
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
@@ -34,25 +54,27 @@ html, body {
   flex-direction: column;
 }
 
-/* ── Leaflet dark-theme overrides ─────────────── */
+/* ── Leaflet Brand-theme overrides ─────────────── */
 .leaflet-container {
-  background: #0f172a;
+  background: var(--bg-card);
 }
-
-.leaflet-tile-pane {
-  filter: brightness(0.55) saturate(0.4) hue-rotate(185deg);
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
-
-.leaflet-popup-content-wrapper {
-  background: #1e293b;
-  color: #f1f5f9;
-  border: 1px solid #334155;
-  border-radius: 0.75rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+.leaflet-popup-close-button {
+  color: var(--text-secondary) !important;
 }
-
-.leaflet-popup-tip {
-  background: #1e293b;
+.custom-marker {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 97, 0, 0.5);
+  font-size: 16px;
+  background-color: var(--bg-card);
 }
 
 .leaflet-popup-close-button {

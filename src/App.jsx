@@ -184,11 +184,11 @@ function PodoApp() {
 
   // ─── Render ──────────────────────────────────────────────────────────────────
   return (
-    <div className="w-full min-h-screen bg-slate-950 text-slate-200 font-sans flex flex-col">
+    <div className="w-full min-h-screen bg-page text-primary font-sans flex flex-col">
 
       {/* ── Header ────────────────────────────────────────────────────────────── */}
       <header
-        className="shrink-0 w-full px-4 py-3 border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-[2000]"
+        className="shrink-0 w-full px-4 py-3 border-b border-border bg-page/95 backdrop-blur sticky top-0 z-[2000]"
         role="banner"
       >
         {!selectedPerson ? (
@@ -197,14 +197,14 @@ function PodoApp() {
             <div className="flex items-center gap-2.5 min-w-0">
               <span className="text-xl select-none shrink-0" aria-hidden="true">🕵️</span>
               <div className="min-w-0">
-                <h1 className="text-base sm:text-xl font-black text-amber-500 tracking-tighter uppercase leading-none truncate">
-                  PodoTrace <span className="text-slate-600 font-light">/</span>{' '}
-                  <span className="text-slate-400 font-semibold">Ankara</span>
+                <h1 className="text-base sm:text-xl font-black text-brand tracking-tighter uppercase leading-none truncate">
+                  PodoTrace <span className="text-secondary font-light">/</span>{' '}
+                  <span className="text-secondary font-semibold">Ankara</span>
                 </h1>
-                <p className="text-[10px] font-mono text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
+                <p className="text-[10px] font-mono text-secondary mt-0.5 flex items-center gap-2 flex-wrap">
                   <StatusBadge type="live" label="Vaka Durumu: KRİTİK" dot />
                   {selectedLocation && (
-                    <span className="text-amber-400 truncate">
+                    <span className="text-brand truncate">
                       🗺 <strong>{selectedLocation}</strong>
                     </span>
                   )}
@@ -212,7 +212,7 @@ function PodoApp() {
               </div>
             </div>
             <span
-              className="text-[10px] font-mono text-slate-500 whitespace-nowrap shrink-0"
+              className="text-[10px] font-mono text-secondary whitespace-nowrap shrink-0"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -223,16 +223,16 @@ function PodoApp() {
           /* Focus Mode Header */
           <div className="w-full flex justify-between items-start md:items-center gap-4 flex-col md:flex-row">
             <div className="flex items-center gap-3">
-              <span className="text-4xl neon-drop" aria-hidden="true">🎯</span>
+              <span className="text-4xl neon-drop drop-shadow-md" aria-hidden="true">🎯</span>
               <div>
-                <h1 className="text-xl md:text-2xl font-black text-slate-100 tracking-tighter uppercase leading-none mb-1">
-                  {selectedPerson} <span className="text-slate-500 font-normal text-lg">— {focusedProfile.score} Bulgu</span>
+                <h1 className="text-xl md:text-2xl font-black text-primary tracking-tighter uppercase leading-none mb-1">
+                  {selectedPerson} <span className="text-secondary font-normal text-lg">— {focusedProfile.score} Bulgu</span>
                 </h1>
                 <div className="flex items-center gap-2 text-[10px] font-mono whitespace-nowrap flex-wrap">
-                  <span className={`px-2 py-0.5 rounded ${focusedProfile.suspicionLevel === 'Yüksek' ? 'bg-red-900/50 text-red-400 border border-red-800' : 'bg-amber-900/50 text-amber-400 border border-amber-800'}`}>
+                  <span className={`px-2 py-0.5 rounded ${focusedProfile.suspicionLevel === 'Yüksek' ? 'bg-red-100 text-red-600 border border-red-200' : 'bg-orange-100 text-brand border border-orange-200'}`}>
                     Şüphe: {focusedProfile.suspicionLevel}
                   </span>
-                  <span className="text-slate-500 border border-slate-800 bg-slate-900 px-2 py-0.5 rounded truncate max-w-[200px] md:max-w-md">
+                  <span className="text-secondary border border-border bg-card px-2 py-0.5 rounded truncate max-w-[200px] md:max-w-md">
                     Alias: {focusedProfile.aliases}
                   </span>
                 </div>
@@ -240,9 +240,9 @@ function PodoApp() {
             </div>
 
             {/* Podo Connections Tree */}
-            <div className="text-[10px] font-mono bg-slate-900/80 border border-slate-800 rounded p-2 text-slate-400 w-full md:w-auto">
-              <div><span className="text-indigo-400">PODO BAĞLANTISI</span></div>
-              <div className="flex flex-col ml-1 border-l border-slate-800 pl-2 mt-1 gap-0.5">
+            <div className="text-[10px] font-mono bg-card border border-border rounded p-2 text-secondary w-full md:w-auto shadow-sm">
+              <div><span className="text-primary font-bold">PODO BAĞLANTISI</span></div>
+              <div className="flex flex-col ml-1 border-l border-border pl-2 mt-1 gap-0.5">
                 <div>├─ {focusedProfile.connPodo.shared} ortak sighting</div>
                 <div>├─ {focusedProfile.connPodo.msgs} mesaj alışverişi</div>
                 <div>└─ {focusedProfile.connPodo.tips} anonim ihbar</div>
@@ -280,7 +280,7 @@ function PodoApp() {
       {/* ── Suspects strip: mobile/tablet horizontal scroll ─────────────── */}
       <nav
         aria-label="Şüpheli filtreleri"
-        className="lg:hidden w-full border-b border-slate-800 bg-slate-950 px-4 py-2"
+        className="lg:hidden w-full border-b border-border bg-sidebar px-4 py-2"
       >
         <ul className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-none" role="list">
           <li className="shrink-0">
@@ -302,11 +302,11 @@ function PodoApp() {
                   aria-label={`${name} şüphelisini filtrele`}
                   aria-pressed={isSelected}
                   onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-                  className={`flex items-center gap-2 transition-all ${isSelected ? 'ring-2 ring-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] bg-slate-800' : ''}`}
+                  className={`flex items-center gap-2 transition-all ${isSelected ? 'ring-2 ring-brand bg-card shadow-sm' : ''}`}
                 >
                   {name}
-                  <span className="text-[10px] bg-slate-900 px-1.5 rounded-full ring-1 ring-slate-700/50 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+                  <span className="text-[10px] bg-page px-1.5 rounded-full ring-1 ring-border flex items-center gap-1 text-primary">
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand inline-block"></span>
                     {getConnectionScore(name)}
                   </span>
                 </Button>
@@ -322,12 +322,12 @@ function PodoApp() {
         {/* ── Suspects sidebar: desktop only ───────────────────────────── */}
         <aside
           aria-label="Şüpheli listesi"
-          className="hidden lg:flex shrink-0 w-44 xl:w-52 flex-col border-r border-slate-800 bg-slate-950 p-3 overflow-y-auto"
+          className="hidden lg:flex w-64 border-r border-border bg-sidebar flex-col overflow-y-auto"
         >
-          <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 shrink-0">
-            Şüpheli Listesi
-          </h2>
-          <ul className="flex flex-col gap-1.5" role="list">
+          <div className="p-4 border-b border-border sticky top-0 bg-sidebar/95 backdrop-blur z-10 shrink-0">
+            <h2 className="text-xs font-black text-secondary tracking-widest uppercase">Şüpheli Listesi</h2>
+          </div>
+          <ul className="p-2 space-y-1" role="list">
             <li>
               <Button
                 variant={!selectedPerson ? 'primary' : 'ghost'}
@@ -348,11 +348,11 @@ function PodoApp() {
                     aria-label={`${name} şüphelisini filtrele`}
                     aria-pressed={isSelected}
                     onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-                    className={`w-full justify-start flex items-center justify-between transition-all ${isSelected ? 'ring-2 ring-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] bg-slate-800' : ''}`}
+                    className={`w-full justify-start flex items-center justify-between transition-all ${isSelected ? 'ring-2 ring-brand bg-card shadow-sm' : ''}`}
                   >
                     <span>{name}</span>
-                    <span className="text-[10px] bg-slate-900 px-1.5 py-0.5 rounded-md ring-1 ring-slate-700/50 flex items-center gap-1 font-mono">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)] inline-block"></span>
+                    <span className="text-[10px] bg-page px-1.5 py-0.5 rounded-md ring-1 ring-border flex items-center gap-1 font-mono text-primary">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand shadow-[0_0_5px_rgba(255,97,0,0.5)] inline-block"></span>
                       {getConnectionScore(name)}
                     </span>
                   </Button>
@@ -370,11 +370,11 @@ function PodoApp() {
           {/* Map panel */}
           <section
             aria-label="İstihbarat haritası"
-            className="border-b lg:border-b-0 lg:border-r border-slate-800 p-3 sm:p-4 flex flex-col gap-2"
+            className="border-b lg:border-b-0 lg:border-r border-border p-3 sm:p-4 flex flex-col gap-2 bg-page"
             style={{ height: 'clamp(320px, 42vh, 520px)' }}
           >
             <div
-              className="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest shrink-0"
+              className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
               aria-hidden="true"
             >
               <span>🗺 İstihbarat Haritası — Ankara</span>
@@ -392,10 +392,10 @@ function PodoApp() {
           {/* Timeline panel */}
           <section
             aria-label="Kronolojik olay akışı"
-            className="timeline-scroll flex flex-col gap-3 p-3 sm:p-4 overflow-y-auto flex-1 min-h-0"
+            className="timeline-scroll flex flex-col gap-3 p-3 sm:p-4 overflow-y-auto flex-1 min-h-0 bg-page"
           >
             <div
-              className="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase tracking-widest shrink-0"
+              className="flex items-center justify-between text-[10px] font-mono text-secondary uppercase tracking-widest shrink-0"
               aria-hidden="true"
             >
               <span>⏱ Kronolojik Olay Akışı</span>

@@ -5,27 +5,29 @@
  *        label – override text; dot – show pulsing dot
  */
 export const BADGE_STYLES = {
-  sightings:     'bg-red-500/10 text-red-400 border border-red-500/20',
-  messages:      'bg-blue-500/10 text-blue-400 border border-blue-500/20',
-  checkins:      'bg-green-500/10 text-green-400 border border-green-500/20',
-  personalNotes: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
-  anonymousTips: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
-  live:          'bg-red-500/10 text-red-400 border border-red-500/30',
-  error:         'bg-red-500/20 text-red-300 border border-red-500/40',
-  gps:           'bg-green-500/10 text-green-400 border border-green-500/20',
+  live:          'bg-red-50 text-red-600 border border-red-200',
+  sightings:     'bg-red-50 text-red-600 border border-red-200',
+  messages:      'bg-indigo-50 text-indigo-600 border border-indigo-200',
+  personalNotes: 'bg-purple-50 text-purple-600 border border-purple-200',
+  checkins:      'bg-emerald-50 text-emerald-600 border border-emerald-200',
+  anonymousTips: 'bg-orange-50 text-brand border border-orange-200',
+  error:         'bg-red-50 text-red-600 border border-red-200',
+  gps:           'bg-emerald-50 text-emerald-600 border border-emerald-200',
 };
 
 export const DOT_COLORS = {
+  live:          'bg-red-500',
   sightings:     'bg-red-500',
-  messages:      'bg-blue-500',
-  checkins:      'bg-green-500',
+  messages:      'bg-indigo-500',
   personalNotes: 'bg-purple-500',
-  anonymousTips: 'bg-amber-500',
+  checkins:      'bg-emerald-500',
+  anonymousTips: 'bg-brand',
+  gps:           'bg-emerald-500',
 };
 
 export default function StatusBadge({ type, label, dot = false, className = '' }) {
-  const badgeClass = BADGE_STYLES[type] ?? 'bg-slate-700/50 text-slate-400 border border-slate-600';
-  const dotClass   = DOT_COLORS[type]   ?? 'bg-slate-400';
+  const badgeClass = BADGE_STYLES[type] ?? 'bg-page text-secondary border border-border';
+  const dotClass   = DOT_COLORS[type]   ?? 'bg-secondary';
   const text       = label ?? type;
 
   return (

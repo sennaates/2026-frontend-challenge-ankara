@@ -21,16 +21,15 @@ export default function ErrorState({
           <span className="text-red-500 text-2xl relative z-10">!</span>
         </div>
       </div>
-      <h3 className="text-red-400 font-bold text-base mb-1">{title}</h3>
-      <p className="text-slate-500 text-sm max-w-xs leading-relaxed mb-5">{description}</p>
+      <h3 className="text-red-500 font-bold text-base mb-1">{title}</h3>
+      <p className="text-secondary text-sm max-w-xs leading-relaxed mb-5">{description}</p>
       {onRetry && (
         <button
           type="button"
           aria-label="Yeniden bağlan"
           onClick={onRetry}
-          className="px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 text-red-400
-            text-sm font-bold hover:bg-red-500/20 transition focus:outline-none
-            focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 rounded-full text-sm font-bold uppercase tracking-wider hover:bg-red-100 transition-colors 
+            focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-page shadow-sm"
         >
           ↺ Yeniden Bağlan
         </button>

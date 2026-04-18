@@ -11,10 +11,10 @@ import { createContext, useCallback, useContext, useState } from 'react';
 const ToastContext = createContext(null);
 
 const TOAST_STYLES = {
-  success: 'bg-green-900/90 border-green-500/40 text-green-200',
-  error:   'bg-red-900/90   border-red-500/40   text-red-200',
-  warning: 'bg-amber-900/90 border-amber-500/40 text-amber-200',
-  info:    'bg-slate-800/90 border-slate-600/40  text-slate-200',
+  success: 'bg-green-50 border-green-200 text-green-700 shadow-md',
+  error:   'bg-red-50 border-red-200 text-red-700 shadow-md',
+  warning: 'bg-orange-50 border-orange-200 text-orange-700 shadow-md',
+  info:    'bg-card border-border text-primary shadow-md',
 };
 
 const TOAST_ICONS = {

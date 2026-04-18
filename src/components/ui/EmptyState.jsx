@@ -22,8 +22,8 @@ export default function EmptyState({
           <circle cx="36" cy="36" r="3" fill="#f59e0b" opacity="0.6" />
         </svg>
       </div>
-      <h3 className="text-slate-300 font-bold text-base mb-1">{title}</h3>
-      <p className="text-slate-500 text-sm max-w-xs leading-relaxed">{description}</p>
+      <h3 className="text-primary font-bold text-base mb-1">{title}</h3>
+      <p className="text-secondary text-sm max-w-xs leading-relaxed">{description}</p>
       {action && <div className="mt-5">{action}</div>}
     </section>
   );

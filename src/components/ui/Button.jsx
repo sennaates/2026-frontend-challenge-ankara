@@ -4,10 +4,10 @@
  * Props: variant ('primary'|'ghost'|'danger'), size ('sm'|'md'), loading, disabled, aria-label, onClick, children
  */
 const VARIANTS = {
-  primary: 'bg-amber-500 text-black hover:bg-amber-400 focus-visible:ring-amber-400',
-  ghost:   'bg-slate-800 text-slate-300 hover:bg-slate-700 focus-visible:ring-slate-500',
-  danger:  'bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 focus-visible:ring-red-400',
-  active:  'bg-amber-500 text-black',
+  primary: 'bg-brand text-white hover:bg-brand/80 focus-visible:ring-brand shadow-sm font-bold',
+  ghost:   'bg-card text-secondary border border-transparent hover:border-border hover:bg-page focus-visible:ring-border',
+  danger:  'bg-red-500/10 text-red-500 hover:bg-red-500/20 focus-visible:ring-red-400',
+  active:  'bg-brand text-white shadow-sm font-bold',
 };
 
 const SIZES = {
@@ -36,8 +36,8 @@ export default function Button({
       disabled={disabled || loading}
       onClick={onClick}
       className={[
-        'inline-flex items-center justify-center gap-2 rounded-full font-bold uppercase tracking-wider',
-        'transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950',
+        'inline-flex items-center justify-center font-medium rounded-lg',
+        'transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-page',
         'disabled:opacity-40 disabled:cursor-not-allowed',
         VARIANTS[variant] ?? VARIANTS.ghost,
         SIZES[size]    ?? SIZES.sm,
