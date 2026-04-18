@@ -39,6 +39,37 @@ export default function MapView({ clues, selectedLocation, onMarkerClick }) {
 
   return (
     <div className="relative w-full h-full min-h-[400px]" role="region" aria-label="Ankara İstihbarat Haritası">
+      {/* Legend Bar - Top */}
+      <div
+        aria-label="Harita göstergesi"
+        className="absolute top-0 left-0 right-0 z-[1000] flex justify-center p-2"
+      >
+        <div className="flex items-center gap-3 px-3 py-1.5 rounded-md" style={{ backgroundColor: 'rgba(26, 26, 46, 0.85)', backdropFilter: 'blur(8px)' }}>
+          {LEGEND_TYPES.map(type => {
+            const color = TYPE_FILL[type] || '#f59e0b';
+            const labels = {
+              sightings: 'Sightings',
+              messages: 'Messages',
+              checkins: 'Checkins',
+              personalNotes: 'Personal Notes',
+              anonymousTips: 'Anonymous Tips'
+            };
+            return (
+              <div key={type} className="flex items-center gap-1.5">
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: color }}
+                  aria-hidden="true"
+                />
+                <span className="text-[10px] font-medium text-white/90 uppercase tracking-wide">
+                  {labels[type]}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <MapContainer
         center={ANKARA_CENTER}
         zoom={13}
@@ -98,21 +129,6 @@ export default function MapView({ clues, selectedLocation, onMarkerClick }) {
           <MapFocuser coords={locationMap[selectedLocation].coords} />
         )}
       </MapContainer>
-
-      {/* Legend */}
-      <footer
-        aria-label="Harita göstergesi"
-        className="absolute bottom-3 left-3 z-[1000] flex flex-wrap gap-1.5 max-w-xs"
-      >
-        {LEGEND_TYPES.map(type => (
-          <StatusBadge
-            key={type}
-            type={type}
-            dot
-            className="bg-slate-950/80 backdrop-blur"
-          />
-        ))}
-      </footer>
     </div>
   );
 }
