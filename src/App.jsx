@@ -11,7 +11,7 @@ import ErrorState    from './components/ui/ErrorState';
 
 // ─── Name normaliser ──────────────────────────────────────────────────────────
 const NAME_MAP = {
-  'kagan': 'KAĞAN', 'kağan': 'KAĞAN',
+  'k.': 'KAĞAN', 'k.yılmaz': 'KAĞAN', 'kagan': 'KAĞAN', 'kağan': 'KAĞAN', 'kagan a.': 'KAĞAN', 'kağan a.': 'KAĞAN',
   'asli': 'ASLI', 'aslı': 'ASLI',
   'fatih': 'FATİH',
   'cem': 'CEM',
@@ -22,7 +22,7 @@ const NAME_MAP = {
 };
 
 const INVALID_NAMES = [
-  'event', 'unknown', 'podo', 'belirtilmemiş',
+  'event', 'unknown', 'belirtilmemiş',
   'ankara', 'cermodern', 'atakule', 'hamamonu', 'hamamönü', 'segmenler', 'seğmenler',
   'kızılay', 'kizilay', 'ulus', 'çankaya', 'cankaya'
 ];
@@ -115,9 +115,40 @@ function PodoApp() {
   const suspects = useMemo(() => {
     const names = allClues
       .map(c => c.normalizedPerson)
-      .filter(n => n); // normalizeName handles skipping invalid ones with null
+      .filter(n => n && n !== 'PODO'); // Podo analiz edilecek ama listede gizlenecek
     return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'tr'));
   }, [allClues]);
+
+  // ─── Connection Analytics ────────────────────────────────────────────────────
+  const getConnectionScore = useCallback((name) => {
+    return allClues.filter(c => c.normalizedPerson === name).length;
+  }, [allClues]);
+
+  const focusedProfile = useMemo(() => {
+    if (!selectedPerson) return null;
+    const suspectClues = allClues.filter(c => c.normalizedPerson === selectedPerson);
+    const podoClues = allClues.filter(c => c.normalizedPerson === 'PODO');
+
+    // Aliases
+    const aliases = [...new Set(suspectClues.map(c => c.person))];
+
+    // Podo Connections
+    const suspectLocDates = new Set(suspectClues.map(c => `${c.date}-${c.location}`));
+    let sharedSightings = 0;
+    for (const pc of podoClues) {
+      if (suspectLocDates.has(`${pc.date}-${pc.location}`)) { sharedSightings++; }
+    }
+    const msgs = suspectClues.filter(c => c.type === 'messages').length;
+    const tips = suspectClues.filter(c => c.type === 'anonymoustips').length;
+    const score = suspectClues.length;
+
+    return {
+      aliases: aliases.length > 0 ? aliases.join(', ') : selectedPerson,
+      score,
+      suspicionLevel: score >= 5 ? 'Yüksek' : 'Orta',
+      connPodo: { shared: sharedSightings, msgs, tips }
+    };
+  }, [allClues, selectedPerson]);
 
   // ─── Filtered clues ──────────────────────────────────────────────────────────
   const filteredClues = useMemo(() => allClues.filter(clue => {
@@ -160,33 +191,65 @@ function PodoApp() {
         className="shrink-0 w-full px-4 py-3 border-b border-slate-800 bg-slate-950/95 backdrop-blur sticky top-0 z-[2000]"
         role="banner"
       >
-        {/* Row 1: brand + record count */}
-        <div className="flex items-center justify-between gap-3 w-full">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <span className="text-xl select-none shrink-0" aria-hidden="true">🕵️</span>
-            <div className="min-w-0">
-              <h1 className="text-base sm:text-xl font-black text-amber-500 tracking-tighter uppercase leading-none truncate">
-                PodoTrace <span className="text-slate-600 font-light">/</span>{' '}
-                <span className="text-slate-400 font-semibold">Ankara</span>
-              </h1>
-              <p className="text-[10px] font-mono text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
-                <StatusBadge type="live" label="Vaka Durumu: KRİTİK" dot />
-                {selectedLocation && (
-                  <span className="text-amber-400 truncate">
-                    🗺 <strong>{selectedLocation}</strong>
+        {!selectedPerson ? (
+          /* Normal Header */
+          <div className="flex items-center justify-between gap-3 w-full">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <span className="text-xl select-none shrink-0" aria-hidden="true">🕵️</span>
+              <div className="min-w-0">
+                <h1 className="text-base sm:text-xl font-black text-amber-500 tracking-tighter uppercase leading-none truncate">
+                  PodoTrace <span className="text-slate-600 font-light">/</span>{' '}
+                  <span className="text-slate-400 font-semibold">Ankara</span>
+                </h1>
+                <p className="text-[10px] font-mono text-slate-500 mt-0.5 flex items-center gap-2 flex-wrap">
+                  <StatusBadge type="live" label="Vaka Durumu: KRİTİK" dot />
+                  {selectedLocation && (
+                    <span className="text-amber-400 truncate">
+                      🗺 <strong>{selectedLocation}</strong>
+                    </span>
+                  )}
+                </p>
+              </div>
+            </div>
+            <span
+              className="text-[10px] font-mono text-slate-500 whitespace-nowrap shrink-0"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {filteredClues.length}&nbsp;/&nbsp;{allClues.length}
+            </span>
+          </div>
+        ) : (
+          /* Focus Mode Header */
+          <div className="w-full flex justify-between items-start md:items-center gap-4 flex-col md:flex-row">
+            <div className="flex items-center gap-3">
+              <span className="text-4xl neon-drop" aria-hidden="true">🎯</span>
+              <div>
+                <h1 className="text-xl md:text-2xl font-black text-slate-100 tracking-tighter uppercase leading-none mb-1">
+                  {selectedPerson} <span className="text-slate-500 font-normal text-lg">— {focusedProfile.score} Bulgu</span>
+                </h1>
+                <div className="flex items-center gap-2 text-[10px] font-mono whitespace-nowrap flex-wrap">
+                  <span className={`px-2 py-0.5 rounded ${focusedProfile.suspicionLevel === 'Yüksek' ? 'bg-red-900/50 text-red-400 border border-red-800' : 'bg-amber-900/50 text-amber-400 border border-amber-800'}`}>
+                    Şüphe: {focusedProfile.suspicionLevel}
                   </span>
-                )}
-              </p>
+                  <span className="text-slate-500 border border-slate-800 bg-slate-900 px-2 py-0.5 rounded truncate max-w-[200px] md:max-w-md">
+                    Alias: {focusedProfile.aliases}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Podo Connections Tree */}
+            <div className="text-[10px] font-mono bg-slate-900/80 border border-slate-800 rounded p-2 text-slate-400 w-full md:w-auto">
+              <div><span className="text-indigo-400">PODO BAĞLANTISI</span></div>
+              <div className="flex flex-col ml-1 border-l border-slate-800 pl-2 mt-1 gap-0.5">
+                <div>├─ {focusedProfile.connPodo.shared} ortak sighting</div>
+                <div>├─ {focusedProfile.connPodo.msgs} mesaj alışverişi</div>
+                <div>└─ {focusedProfile.connPodo.tips} anonim ihbar</div>
+              </div>
             </div>
           </div>
-          <span
-            className="text-[10px] font-mono text-slate-500 whitespace-nowrap shrink-0"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {filteredClues.length}&nbsp;/&nbsp;{allClues.length}
-          </span>
-        </div>
+        )}
 
         {/* Row 2: search + reset */}
         <div
@@ -230,18 +293,26 @@ function PodoApp() {
               Hepsi
             </Button>
           </li>
-          {suspects.map(name => (
-            <li key={name} className="shrink-0">
-              <Button
-                variant={selectedPerson === name ? 'primary' : 'ghost'}
-                aria-label={`${name} şüphelisini filtrele`}
-                aria-pressed={selectedPerson === name}
-                onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-              >
-                {name}
-              </Button>
-            </li>
-          ))}
+          {suspects.map(name => {
+            const isSelected = selectedPerson === name;
+            return (
+              <li key={name} className="shrink-0">
+                <Button
+                  variant={isSelected ? 'primary' : 'ghost'}
+                  aria-label={`${name} şüphelisini filtrele`}
+                  aria-pressed={isSelected}
+                  onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
+                  className={`flex items-center gap-2 transition-all ${isSelected ? 'ring-2 ring-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] bg-slate-800' : ''}`}
+                >
+                  {name}
+                  <span className="text-[10px] bg-slate-900 px-1.5 rounded-full ring-1 ring-slate-700/50 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 inline-block"></span>
+                    {getConnectionScore(name)}
+                  </span>
+                </Button>
+              </li>
+            );
+          })}
         </ul>
       </nav>
 
@@ -268,19 +339,26 @@ function PodoApp() {
                 Hepsi
               </Button>
             </li>
-            {suspects.map(name => (
-              <li key={name}>
-                <Button
-                  variant={selectedPerson === name ? 'primary' : 'ghost'}
-                  aria-label={`${name} şüphelisini filtrele`}
-                  aria-pressed={selectedPerson === name}
-                  onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
-                  className="w-full justify-start"
-                >
-                  {name}
-                </Button>
-              </li>
-            ))}
+            {suspects.map(name => {
+              const isSelected = selectedPerson === name;
+              return (
+                <li key={name}>
+                  <Button
+                    variant={isSelected ? 'primary' : 'ghost'}
+                    aria-label={`${name} şüphelisini filtrele`}
+                    aria-pressed={isSelected}
+                    onClick={() => setSelectedPerson(prev => prev === name ? null : name)}
+                    className={`w-full justify-start flex items-center justify-between transition-all ${isSelected ? 'ring-2 ring-amber-500 shadow-[0_0_15px_rgba(245,158,11,0.5)] bg-slate-800' : ''}`}
+                  >
+                    <span>{name}</span>
+                    <span className="text-[10px] bg-slate-900 px-1.5 py-0.5 rounded-md ring-1 ring-slate-700/50 flex items-center gap-1 font-mono">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.8)] inline-block"></span>
+                      {getConnectionScore(name)}
+                    </span>
+                  </Button>
+                </li>
+              );
+            })}
           </ul>
         </aside>
 
